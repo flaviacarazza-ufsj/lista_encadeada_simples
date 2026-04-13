@@ -41,18 +41,63 @@ void Imprime(TipoLista Lista) {
 }
 
 void RetiraUltimo(TipoLista *Lista, TipoItem *Item) {
-    /* IMPLEMENTAR */
+    if (Vazia(*Lista)){
+        return;
+    }
+    TipoApontador Aux = Lista->Primeiro->Prox;
+    
+    if(Aux->Prox == NULL){
+        *Item = Aux->Item; 
+        free(Aux);
+        Lista->Primeiro->Prox = NULL;
+        Lista->Ultimo = Lista->Primeiro;
+    }else {
+        while (Aux->Prox->Prox != NULL) { //enquanto nao eh o penultimo
+            Aux = Aux->Prox;
+        }
+        *Item = Aux->Prox->Item;
+        free(Aux->Prox);
+        Aux->Prox = NULL;
+        Lista->Ultimo = Aux;
+        
+    }
 }
 
 void InsereInicio(TipoItem x, TipoLista *Lista) {
-    /* IMPLEMENTAR */
+    if(Vazia(*Lista)){
+        Insere(x, Lista);
+    }else {
+        TipoApontador Aux = (TipoApontador) malloc(sizeof(TipoCelula));
+        Aux->Prox = Lista->Primeiro->Prox;
+        Lista->Primeiro->Prox = Aux;
+        Aux->Item = x;
+    }
 }
 
 void Inverte(TipoLista *Lista) {
-    /* IMPLEMENTAR */
+    if (Vazia(*Lista) || Lista->Primeiro->Prox->Prox == NULL) {
+        return; //
+    }
+    TipoApontador ant = NULL;
+    TipoApontador atual = Lista->Primeiro->Prox;
+    TipoApontador proxi = NULL;
+    TipoApontador novoUltimo = Lista->Primeiro->Prox;
+    while (atual != NULL) {
+        proxi = atual->Prox;
+        atual->Prox = ant;
+        ant = atual;
+        atual = proxi;
+    }
+    Lista->Primeiro->Prox = ant;
+    Lista->Ultimo = novoUltimo;
 }
 
 int Tamanho(TipoLista *Lista) {
-    /* IMPLEMENTAR */
-    return XXX;
+    int tam = 0;
+    TipoApontador Aux = Lista->Primeiro->Prox;
+    while (Aux != NULL) {
+        tam++;
+        Aux = Aux->Prox;
+    }
+    return tam;
 }
